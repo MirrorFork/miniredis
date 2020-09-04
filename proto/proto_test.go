@@ -91,6 +91,13 @@ func TestRead(t *testing.T) {
 		test(t, "*-1\r\n")
 	})
 
+	t.Run("push", func(t *testing.T) {
+		test(t, ">0\r\n")
+		test(t, ">1\r\n-foo\r\n")
+		test(t, ">2\r\n-foo\r\n$3\r\nfoo\r\n")
+		test(t, ">-1\r\n")
+	})
+
 	t.Run("nil", func(t *testing.T) {
 		test(t, "$-1\r\n")
 	})

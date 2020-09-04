@@ -45,6 +45,12 @@ func Array(args ...string) string {
 	return fmt.Sprintf("*%d\r\n", len(args)) + strings.Join(args, "")
 }
 
+// Push assembles the args for push-data. Args should be raw redis commands.
+// Example: Push(String("foo"), String("bar"))
+func Push(args ...string) string {
+	return fmt.Sprintf(">%d\r\n", len(args)) + strings.Join(args, "")
+}
+
 // Strings is a helper to build 1 dimensional string arrays.
 func Strings(args ...string) string {
 	var strings []string

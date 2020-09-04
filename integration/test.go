@@ -170,6 +170,25 @@ func testRESP3(t *testing.T, cb func(*client)) {
 	cb(client)
 }
 
+// like testRESP3, but with two connections
+func testRESP3Pair(t *testing.T, cb func(*client, *client)) {
+	t.Helper()
+
+	sMini, err := miniredis.Run()
+	if err != nil {
+		t.Fatalf("unexpected miniredis error: %s", err.Error())
+	}
+	defer sMini.Close()
+
+	sReal, sRealAddr := Redis()
+	defer sReal.Close()
+
+	client1 := newClientResp3(t, sRealAddr, sMini)
+	client2 := newClientResp3(t, sRealAddr, sMini)
+
+	cb(client1, client2)
+}
+
 func looselyEqual(a, b interface{}) bool {
 	switch av := a.(type) {
 	case string:

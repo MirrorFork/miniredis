@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	ErrProtocol   = errors.New("invalid request")
+	ErrProtocol   = errors.New("unsupported protocol")
 	ErrUnexpected = errors.New("not what you asked for")
 )
 
@@ -38,7 +38,10 @@ func ReadArray(b string) ([]string, error) {
 	switch line[0] {
 	default:
 		return nil, ErrUnexpected
-	case '*', '~':
+	case '*', '>', '~':
+		// *: array
+		// >: push data
+		// ~: set
 		length, err := strconv.Atoi(line[1 : len(line)-2])
 		if err != nil {
 			return nil, err
@@ -176,8 +179,9 @@ func Read(r *bufio.Reader) (string, error) {
 			pos += n
 		}
 		return line + string(buf), nil
-	case '*', '~':
+	case '*', '>', '~':
 		// arrays are: `*6\r\n...`
+		// pushdata is: `>6\r\n...`
 		// sets are: `~6\r\n...`
 		length, err := strconv.Atoi(line[1 : len(line)-2])
 		if err != nil {

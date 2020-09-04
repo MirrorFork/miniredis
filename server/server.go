@@ -326,6 +326,13 @@ func (c *Peer) WriteSetLen(n int) {
 	})
 }
 
+// WritePushLen starts a push-data array with the given length
+func (c *Peer) WritePushLen(n int) {
+	c.Block(func(w *Writer) {
+		w.WritePushLen(n)
+	})
+}
+
 // WriteInt writes an integer
 func (c *Peer) WriteInt(n int) {
 	c.Block(func(w *Writer) {
@@ -382,6 +389,14 @@ func (w *Writer) WriteMapLen(n int) {
 func (w *Writer) WriteSetLen(n int) {
 	if w.resp3 {
 		fmt.Fprintf(w.w, "~%d\r\n", n)
+		return
+	}
+	w.WriteLen(n)
+}
+
+func (w *Writer) WritePushLen(n int) {
+	if w.resp3 {
+		fmt.Fprintf(w.w, ">%d\r\n", n)
 		return
 	}
 	w.WriteLen(n)

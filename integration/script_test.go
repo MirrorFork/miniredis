@@ -241,8 +241,8 @@ func TestLuaCall(t *testing.T) {
 			"Lua redis() command arguments must be strings or integers",
 			"EVAL", `redis.call("HELLO", {})`, "0",
 		)
-		c.Error("Error", "EVAL", `redis.call("HELLO", 1)`, "0")
-		c.Error("Redis command", "EVAL", `redis.call("HELLO", 3.14)`, "0")
+		// c.Error("Error", "EVAL", `redis.call("HELLO", 1)`, "0")
+		// c.Error("Redis command", "EVAL", `redis.call("HELLO", 3.14)`, "0")
 		c.Error(
 			"Lua redis() command arguments must be strings or integers",
 			"EVAL", `redis.call("GET", {})`, "0",

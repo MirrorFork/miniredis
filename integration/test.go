@@ -220,6 +220,20 @@ func looselyEqual(a, b interface{}) bool {
 			}
 		}
 		return true
+	case map[interface{}]interface{}:
+		bv, ok := b.(map[interface{}]interface{})
+		if !ok {
+			return false
+		}
+		if len(av) != len(bv) {
+			return false
+		}
+		for k, v := range av {
+			if !looselyEqual(v, bv[k]) {
+				return false
+			}
+		}
+		return true
 	default:
 		panic(fmt.Sprintf("unhandled case, got a %#v / %T", a, a))
 	}
